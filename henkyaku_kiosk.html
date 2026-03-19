@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>返却カウンター | 沼津高専</title>
+    <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; text-align: center; background-color: #f4f7f6; margin: 0; padding-top: 50px; }
+        .container { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: inline-block; width: 90%; max-width: 500px; }
+        h1 { color: #2c3e50; margin-bottom: 10px; }
+        input { width: 80%; padding: 10px; font-size: 1.2rem; border: 2px solid #bdc3c7; border-radius: 8px; margin-bottom: 20px; }
+        
+        /* 返却ボタンのスタイル */
+        #return-btn { 
+            display: none; /* 最初は隠しておく */
+            width: 100%; padding: 25px; font-size: 2rem; font-weight: bold;
+            color: white; background-color: #e67e22; /* オレンジ色で目立たせる */
+            border: none; border-radius: 15px; cursor: pointer;
+            box-shadow: 0 5px #d35400; transition: 0.2s;
+        }
+        #return-btn:active { box-shadow: 0 2px #d35400; transform: translateY(3px); }
+        
+        #status { margin-top: 20px; font-size: 1.5rem; font-weight: bold; min-height: 2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>📦 物品返却</h1>
+        <p>QRをスキャンしてください</p>
+        
+        <input type="text" id="scanInput" autofocus placeholder="スキャン待ち...">
+        
+        <button id="return-btn" onclick="confirmReturn()">返却を確定する</button>
+        
+        <div id="status">待機中...</div>
+    </div>
+
+    <script>
+        const input = document.getElementById('scanInput');
+        const btn = document.getElementById('return-btn');
+        const status = document.getElementById('status');
+        let currentId = "";
+
+        // 入力を監視してIDを抽出
+        input.addEventListener('input', () => {
+            const match = input.value.match(/id_1=([A-Z0-9-]+)/);
+            if (match) {
+                currentId = match[1];
+                status.innerText = `読み取り成功: ${currentId}`;
+                status.style.color = "#3498db";
+                btn.style.display = "block"; // ボタンを表示！
+                input.blur(); // 入力欄からフォーカスを外す
+            }
+        });
+
+        // ボタンを押した時の処理
+        function confirmReturn() {
+            status.innerText = `✅ ${currentId} を返却しました！`;
+            status.style.color = "#27ae60";
+            btn.style.display = "none"; // ボタンを隠す
+            input.value = ""; // 入力をクリア
+            
+            // 3秒後に「待機中」に戻す
+            setTimeout(() => {
+                status.innerText = "待機中...";
+                status.style.color = "#2c3e50";
+                input.focus(); // 次のスキャンに備える
+            }, 3000);
+
+            // TODO: ここでPower Automateへ送信
+            console.log("送信完了:", currentId);
+        }
+
+        // どこを触ってもスキャン待ちに戻る
+        document.addEventListener('click', () => { if(btn.style.display !== "block") input.focus(); });
+    </script>
+</body>
+</html>
