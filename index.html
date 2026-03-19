@@ -57,14 +57,19 @@
             const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
 
             if (code && !currentId) {
-                const match = code.data.match(/id_1=([A-Z0-9-]+)/);
+                // Formsの長いパラメーター（re...=）の後の値を抜き出す
+                const match = code.data.match(/[?&]re[a-z0-9]+=([A-Z0-9-]+)/i);
+                
                 if (match) {
-                    currentId = match[1];
+                    currentId = match[1]; // これで VR001 などのIDが取れる！
                     status.innerText = `読み取り成功: ${currentId}`;
                     status.style.color = "#3498db";
                     btn.style.display = "block";
-                    // 読み取り成功したら一瞬バイブレーション（スマホ/タブレットのみ）
                     if (navigator.vibrate) navigator.vibrate(200);
+                } else if (code.data.includes("forms.office.com")) {
+                    // URLはFormsだけど、IDが末尾についていない場合
+                    status.innerText = "❌ IDが含まれていないQRです";
+                    status.style.color = "red";
                 }
             }
         }
