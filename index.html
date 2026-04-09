@@ -2,19 +2,62 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>物品返却カメラ | 沼津高専</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="備品返却">
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f0f2f5; margin: 0; padding: 20px; }
-        #wrapper { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        video { width: 100%; border-radius: 10px; background: #000; }
+        body { 
+            font-family: 'Hiragino Kaku Gothic ProN', sans-serif; 
+            text-align: center; 
+            background: #000; /* 背景を黒にすると、カメラとの一体感が出るよ */
+            color: #fff;
+            margin: 0; 
+            padding: 0;
+            overflow: hidden; /* 余計なスクロールを禁止 */
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #wrapper { 
+            width: 90%; 
+            max-width: 600px; 
+            background: rgba(255, 255, 255, 0.1); /* ほんのり透ける背景 */
+            padding: 30px; 
+            border-radius: 30px; 
+            backdrop-filter: blur(10px); /* すりガラス効果 */
+        }
+        video { 
+            width: 100%; 
+            border-radius: 20px; 
+            background: #222; 
+            transform: scaleX(1); /* インカメラを使うなら-1で鏡にするのもアリ */
+        }
         #canvas { display: none; }
         #return-btn { 
-            display: none; width: 100%; padding: 20px; font-size: 1.8rem; margin-top: 20px;
-            color: white; background: #e67e22; border: none; border-radius: 15px; cursor: pointer;
+            display: none; 
+            width: 100%; 
+            padding: 25px; 
+            font-size: 2rem; 
+            margin-top: 25px;
+            color: white; 
+            background: #2ecc71; /* 返却は「完了」のイメージで緑もおすすめ！ */
+            border: none; 
+            border-radius: 20px; 
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
         }
-        #status { margin-top: 15px; font-size: 1.2rem; font-weight: bold; min-height: 1.5em; }
+        #status { 
+            margin-top: 20px; 
+            font-size: 1.4rem; 
+            font-weight: bold; 
+            min-height: 1.5em; 
+            color: #ecf0f1;
+        }
     </style>
 </head>
 <body>
