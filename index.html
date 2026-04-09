@@ -6,57 +6,71 @@
     <title>物品返却カメラ | 沼津高専</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="備品返却">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default"> <meta name="apple-mobile-web-app-title" content="備品返却">
+    
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
         body { 
             font-family: 'Hiragino Kaku Gothic ProN', sans-serif; 
             text-align: center; 
-            background: #000; /* 背景を黒にすると、カメラとの一体感が出るよ */
-            color: #fff;
+            background: #f4f7f6; /* 明るい薄いグレー（目に優しい！） */
+            color: #333; /* 文字は濃いグレーで読みやすく */
             margin: 0; 
             padding: 0;
-            overflow: hidden; /* 余計なスクロールを禁止 */
+            overflow: hidden; 
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         #wrapper { 
-            width: 90%; 
-            max-width: 600px; 
-            background: rgba(255, 255, 255, 0.1); /* ほんのり透ける背景 */
-            padding: 30px; 
-            border-radius: 30px; 
-            backdrop-filter: blur(10px); /* すりガラス効果 */
+            width: 95%; /* iPadに合わせて少し広めに */
+            max-width: 700px; 
+            background: white; /* 清潔感のある白背景 */
+            padding: 40px; 
+            border-radius: 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* ほんのり影をつけて立体感を */
         }
+        
+        /* カメラ映像を主役に！ */
         video { 
             width: 100%; 
-            border-radius: 20px; 
-            background: #222; 
-            transform: scaleX(1); /* インカメラを使うなら-1で鏡にするのもアリ */
+            border-radius: 25px; 
+            background: #eee; /* カメラ起動前は薄いグレー */
+            border: 4px solid #fff; /* 白い枠線 */
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.1); /* 内側に影を入れて凹凸を表現 */
         }
         #canvas { display: none; }
+        
+        /* ボタンを大きく、押しやすく！ */
         #return-btn { 
             display: none; 
             width: 100%; 
-            padding: 25px; 
-            font-size: 2rem; 
-            margin-top: 25px;
+            padding: 30px; 
+            font-size: 2.2rem; 
+            margin-top: 30px;
             color: white; 
-            background: #2ecc71; /* 返却は「完了」のイメージで緑もおすすめ！ */
+            background: #2ecc71; /* 爽やかな緑で「完了」のイメージ */
             border: none; 
-            border-radius: 20px; 
+            border-radius: 25px; 
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);
+            transition: all 0.2s ease; /* タップ時に少し動かす演出用 */
         }
+        #return-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
+        }
+
         #status { 
-            margin-top: 20px; 
-            font-size: 1.4rem; 
+            margin-top: 25px; 
+            font-size: 1.6rem; 
             font-weight: bold; 
             min-height: 1.5em; 
-            color: #ecf0f1;
+            color: #555;
+            background: #eefaf3; /* ステータスエリアをほんのり緑に */
+            padding: 15px;
+            border-radius: 15px;
         }
     </style>
 </head>
